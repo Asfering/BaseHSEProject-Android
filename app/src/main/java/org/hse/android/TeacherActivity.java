@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,7 +76,7 @@ public class TeacherActivity extends AppCompatActivity {
 
     private void initTime(){
         Date CurrentTime = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm EEEE", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
         time.setText(simpleDateFormat.format(CurrentTime));
     }
 
@@ -92,12 +93,12 @@ public class TeacherActivity extends AppCompatActivity {
 // чем делать единый массив для групп студентов и ФИО преподавателей
 // например, при попытке получить имена всех преподавателей, список выведет нам не только
 // ФИО преподов, но и студенческие группы, что глупо
-    static class TeacherGroup {
+    class TeacherGroup {
         private Integer id;
         private String name;
 
-        public TeacherGroup(Integer id, String name){
-            this.id  = id;
+        public TeacherGroup(Integer id, String name) {
+            this.id = id;
             this.name = name;
         }
 

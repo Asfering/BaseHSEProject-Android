@@ -76,7 +76,7 @@ public class StudentActivity extends AppCompatActivity {
 
     private void initTime(){
         Date CurrentTime = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
         time.setText(simpleDateFormat.format(CurrentTime));
     }
 
@@ -89,12 +89,13 @@ public class StudentActivity extends AppCompatActivity {
     }
 
 
-    static class StudyGroup {
+
+    class StudyGroup {
         private Integer id;
         private String name;
 
-        public StudyGroup(Integer id, String name){
-            this.id  = id;
+        public StudyGroup(Integer id, String name) {
+            this.id = id;
             this.name = name;
         }
 
