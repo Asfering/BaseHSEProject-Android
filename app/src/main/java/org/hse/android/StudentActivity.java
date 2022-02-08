@@ -69,9 +69,33 @@ public class StudentActivity extends AppCompatActivity {
 
 
     private void initGroupList(List<StudyGroup> groups){
-        groups.add(new StudyGroup(1, "ПИ-19-1"));
-        groups.add(new StudyGroup(2, "ПИ-19-2"));
-        groups.add(new StudyGroup(3, "ПИ-19-3"));
+
+        int currentStudyNumber = 22;
+        int lastStudyNumber = 17;
+
+        // массив, можно будет потом заменить на что-то более самостоятельно обновляемое
+        String[] array = new String[] {"Программная Инженерия", "Бизнес Информатика", "История", "Иностранные Языки"};
+        String nothing = "";        // Заглушка типа temp
+        List<String> endOfArray = new ArrayList<>();        // лист для вывода ПИ,БИ,И, ИЯ и тд
+        for (int i = 0; i<array.length; i++){
+            String[] temp=array[i].split(" ");      // вспомогательная переменная temp, делим направления по словам
+
+            for (int j=0; j<temp.length; j++){            // идём по словам
+                char t = temp[j].charAt(0);                 // берем первую букву
+                nothing += t;                               // заполняем заглушку
+            }
+            endOfArray.add(nothing);                        // добавляем в лист направления
+            nothing = "";                                   // очищаем заглушку
+        }
+
+        // заполняем группы
+        for (int numDiscp = 0;numDiscp<endOfArray.size();numDiscp++){                       // идём по направлениям
+            for(int numYear=lastStudyNumber; numYear<currentStudyNumber; numYear++){        // идём по годам. На данный момент берем 17-21 годы
+                for(int numGroup = 1; numGroup<4; numGroup++){                              // номера групп. ПО умолчанию 3 группы, изменяемо.
+                    groups.add(new StudyGroup(groups.size(), endOfArray.get(numDiscp) + "-" + numYear + "-" + numGroup));
+                }
+            }
+        }
     }
 
     private void initTime(){
