@@ -2,8 +2,7 @@ package org.hse.android;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,13 +11,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-public class StudentActivity extends AppCompatActivity {
+public class StudentActivity extends BaseActivity {
 
     TextView time;
     TextView textPara;
@@ -26,13 +22,12 @@ public class StudentActivity extends AppCompatActivity {
     TextView cabinet;
     TextView corp;
     TextView teacher;
+    final Spinner spinner = findViewById(R.id.SpinnerGroup);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
-
-        final Spinner spinner = findViewById(R.id.SpinnerGroup);
 
         List<StudyGroup> groups = new ArrayList<>();
         initGroupList(groups);
@@ -63,6 +58,11 @@ public class StudentActivity extends AppCompatActivity {
         cabinet = findViewById(R.id.textCab);
         corp = findViewById(R.id.textCampus);
         teacher = findViewById(R.id.textTeacher);
+
+        View scheduleDay = findViewById(R.id.buttonDay);
+        scheduleDay.setOnClickListener(v -> showSchedule(ScheduleType.DAY));
+        View scheduleWeek = findViewById(R.id.buttonWeek);
+        scheduleWeek.setOnClickListener(v -> showSchedule(ScheduleType.WEEK));
 
         initData();
     }
@@ -98,11 +98,11 @@ public class StudentActivity extends AppCompatActivity {
         }
     }
 
-    private void initTime(){
-        Date CurrentTime = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
-        time.setText(simpleDateFormat.format(CurrentTime));
-    }
+    //private void initTime(){
+    //    Date CurrentTime = new Date();
+    //    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
+    //    time.setText(simpleDateFormat.format(CurrentTime));
+    //}
 
     private void initData(){
         textPara.setText("Нет пар");
@@ -112,6 +112,21 @@ public class StudentActivity extends AppCompatActivity {
         teacher.setText("Преподаватель");
     }
 
+    private void showSchedule(ScheduleType type){
+        Object selectedItem = spinner.getSelectedItem();
+        if (!(selectedItem instanceof StudyGroup)) {
+            return;
+        }
+        showScheduleImpl(ScheduleMode.STUDENT, type, (StudyGroup) selectedItem);
+    }
+
+    private void showScheduleImpl(ScheduleMode mode, ScheduleType type, StudyGroup group) {
+        Intent intent = new Intent(this, ScheduleActivity.class);
+        intent.putExtra(ScheduleActivity.ARG_ID, group.getId());
+        intent.putExtra(ScheduleActivity.ARG_TYPE, type);
+        intent.putExtra(ScheduleActivity.ARG_MODE, mode);
+        startActivity(intent);
+    }
 
 
     class StudyGroup {

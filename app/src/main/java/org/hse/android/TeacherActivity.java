@@ -2,8 +2,7 @@ package org.hse.android;
 
 import static android.content.ContentValues.TAG;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,13 +12,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-public class TeacherActivity extends AppCompatActivity {
+public class TeacherActivity extends BaseActivity {
 
     TextView time;
     TextView textPara;
@@ -27,6 +23,7 @@ public class TeacherActivity extends AppCompatActivity {
     TextView cabinet;
     TextView corp;
     TextView teacher;
+    final Spinner spinner = findViewById(R.id.SpinnerGroup);
 
 
     @Override
@@ -34,7 +31,6 @@ public class TeacherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
 
-        final Spinner spinner = findViewById(R.id.SpinnerGroup);
 
         List<TeacherGroup> groups = new ArrayList<>();
         initGroupList(groups);
@@ -66,6 +62,11 @@ public class TeacherActivity extends AppCompatActivity {
         corp = findViewById(R.id.textCampus);
         teacher = findViewById(R.id.textTeacher);
 
+        View scheduleDay = findViewById(R.id.buttonDay);
+        scheduleDay.setOnClickListener(v -> showSchedule(ScheduleType.DAY));
+        View scheduleWeek = findViewById(R.id.buttonWeek);
+        scheduleWeek.setOnClickListener(v -> showSchedule(ScheduleType.WEEK));
+
         initData();
     }
 
@@ -74,11 +75,28 @@ public class TeacherActivity extends AppCompatActivity {
         groups.add(new TeacherGroup(2, "Преподаватель 2"));
     }
 
-    private void initTime(){
-        Date CurrentTime = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
-        time.setText(simpleDateFormat.format(CurrentTime));
+    private void showSchedule(ScheduleType type){
+        Object selectedItem = spinner.getSelectedItem();
+        if (!(selectedItem instanceof TeacherGroup)) {
+            return;
+        }
+        showScheduleImpl(ScheduleMode.TEACHER, type, (TeacherGroup) selectedItem);
     }
+
+    private void showScheduleImpl(ScheduleMode mode, ScheduleType type, TeacherGroup group) {
+        Intent intent = new Intent(this, ScheduleActivity.class);
+        intent.putExtra(ScheduleActivity.ARG_ID, group.getId());
+        intent.putExtra(ScheduleActivity.ARG_TYPE, type);
+        intent.putExtra(ScheduleActivity.ARG_MODE, mode);
+        startActivity(intent);
+    }
+
+    // private void initTime(){
+    //    Date CurrentTime = new Date();
+     //   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm, EEEE", Locale.forLanguageTag("ru"));
+    //    time.setText(simpleDateFormat.format(CurrentTime));
+   // }
+
 
     private void initData(){
         textPara.setText("Нет пар");

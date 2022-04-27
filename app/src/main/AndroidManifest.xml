@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lab0Base">
         <activity
+            android:name=".BaseActivity"
+            android:exported="false" />
+        <activity
             android:name=".SensorsActivity"
             android:exported="false" />
         <activity
